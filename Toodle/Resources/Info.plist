@@ -9,5 +9,6 @@
 <key>NSLocationWhenInUseUsageDescription</key><string>Verify the location of a field capture before offering a real alert.</string>
 <key>NSPhotoLibraryUsageDescription</key><string>Select a street image for analysis.</string>
 <key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string></array>
+<key>UIAppFonts</key><array><string>Playfair-Variable.ttf</string></array>
 <key>UILaunchScreen</key><dict><key>UIColorName</key><string>LaunchBackground</string><key>UIImageName</key><string>toodle-logo-teal</string></dict>
 </dict></plist>
