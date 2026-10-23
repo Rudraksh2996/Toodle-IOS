@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>CFBundleDisplayName</key><string>Toodle</string>
+<key>CFBundleShortVersionString</key><string>1.0</string>
+<key>CFBundleVersion</key><string>1</string>
+<key>API_BASE_URL</key><string>$(API_BASE_URL)</string>
+<key>NSCameraUsageDescription</key><string>Capture street flooding and blocked drains for field analysis.</string>
+<key>NSLocationWhenInUseUsageDescription</key><string>Verify the location of a field capture before offering a real alert.</string>
+<key>NSPhotoLibraryUsageDescription</key><string>Select a street image for analysis.</string>
+<key>UISupportedInterfaceOrientations</key><array><string>UIInterfaceOrientationPortrait</string></array>
+<key>UILaunchScreen</key><dict><key>UIColorName</key><string>LaunchBackground</string><key>UIImageName</key><string>toodle-logo-teal</string></dict>
+</dict></plist>
