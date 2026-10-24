@@ -57,7 +57,7 @@ struct LiveRiskSample: Identifiable {
 }
 extension RiskBand { var color: Color { Color(red:Double((hex >> 16) & 255)/255,green:Double((hex >> 8) & 255)/255,blue:Double(hex & 255)/255) } }
 extension View {
-    func card() -> some View { padding(18).background(.ultraThinMaterial,in:RoundedRectangle(cornerRadius:22)).overlay(RoundedRectangle(cornerRadius:22).stroke(.white.opacity(0.07))) }
+    func card() -> some View { padding(Tok.Space.md).textZone() }
 }
 struct RiskBadge: View {
     let node: Node
