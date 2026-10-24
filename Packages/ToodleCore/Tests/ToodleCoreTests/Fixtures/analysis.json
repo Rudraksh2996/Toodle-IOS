@@ -1,0 +1,1 @@
+{"success":true,"data":{"valid":true,"confidence":98.4,"flood_detected":true,"pooling_score":0.85,"blockageDetected":true,"blockageConfidence":92.1,"tags":["Water","Flood","Puddle","Drain","Garbage"],"labels":[{"name":"Drain","confidence":99.1}]}}
