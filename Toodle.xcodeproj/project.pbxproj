@@ -21,6 +21,10 @@
 		EA7E26EF80101CAD1AD4EA68 /* ToodleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */; };
 		EE9E3E1093BC7F51D9581457 /* DispatchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EA878FB88C389340EBC3F1 /* DispatchSheet.swift */; };
 		FC353224440D7CBCD558B67C /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */; };
+		A1B2C3D4E5F60718293A4B01 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B02 /* Theme.swift */; };
+		A1B2C3D4E5F60718293A4B03 /* Effects.metal in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B04 /* Effects.metal */; };
+		A1B2C3D4E5F60718293A4B05 /* BodoniModa.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */; };
+		A1B2C3D4E5F60718293A4B07 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B08 /* OFL.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		E608D3AB1E2D207BEF01C6DC /* CommandCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCenterView.swift; sourceTree = "<group>"; };
 		E814FD9B7C860E0237A022E3 /* Toodle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toodle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToodleUITests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B02 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B04 /* Effects.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Effects.metal; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BodoniModa.ttf; sourceTree = "<group>"; };
+		A1B2C3D4E5F60718293A4B08 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +107,8 @@
 				BAE0D077528504DB14227262 /* AppEnvironment.swift */,
 				A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */,
 				25907DB3A81884067EF170D6 /* ToodleApp.swift */,
+				A1B2C3D4E5F60718293A4B04 /* Effects.metal */,
+				A1B2C3D4E5F60718293A4B02 /* Theme.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -109,6 +119,7 @@
 				625062973E7C7D027DCCE59F /* Assets.xcassets */,
 				1ADC71FDB2050DAB438ADE57 /* Info.plist */,
 				01B6E4491D13AD897A51EDCA /* LaunchScreen.storyboard */,
+				A1B2C3D4E5F60718293A4B09 /* Fonts */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -154,6 +165,15 @@
 				717EDFEB3CA76F458601FD99 /* Resources */,
 			);
 			path = Toodle;
+			sourceTree = "<group>";
+		};
+		A1B2C3D4E5F60718293A4B09 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */,
+				A1B2C3D4E5F60718293A4B08 /* OFL.txt */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -244,6 +264,8 @@
 			files = (
 				2298F1E54747E4953A45B7B3 /* Assets.xcassets in Resources */,
 				8EAC02DFFFA20F6188AA75AA /* LaunchScreen.storyboard in Resources */,
+				A1B2C3D4E5F60718293A4B07 /* OFL.txt in Resources */,
+				A1B2C3D4E5F60718293A4B05 /* BodoniModa.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +286,8 @@
 				FC353224440D7CBCD558B67C /* RootTabView.swift in Sources */,
 				301D4FF71674B7B0C95827BD /* SettingsView.swift in Sources */,
 				8DBD256207BCF515EBACFF7F /* ToodleApp.swift in Sources */,
+				A1B2C3D4E5F60718293A4B03 /* Effects.metal in Sources */,
+				A1B2C3D4E5F60718293A4B01 /* Theme.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,7 +365,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
@@ -424,7 +448,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};

@@ -7,7 +7,7 @@ struct RootTabView: View {
             CommandCenterView().tabItem { Label("Command",systemImage:"map") }.tag(1)
             CaptureView().tabItem { Label("Capture",systemImage:"camera") }.tag(2)
             SettingsView().tabItem { Label("Settings",systemImage:"gearshape") }.tag(3)
-        }.environment(app).tint(Color(red:0.08,green:0.72,blue:0.65))
+        }.environment(app).tint(Tok.accent)
     }
 }
 #Preview { RootTabView() }
