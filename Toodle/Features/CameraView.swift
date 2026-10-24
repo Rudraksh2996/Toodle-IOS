@@ -24,15 +24,22 @@ final class CameraController: UIViewController, AVCapturePhotoCaptureDelegate {
     var onImage: ((UIImage) -> Void)?
     var onCancel: (() -> Void)?
     override func viewDidLoad() {
-        super.viewDidLoad(); view.backgroundColor = .black
+        super.viewDidLoad(); view.backgroundColor = UIColor(Tok.ink)
         let preview = AVCaptureVideoPreviewLayer(session:session); preview.videoGravity = .resizeAspectFill; view.layer.addSublayer(preview); self.preview = preview
-        shutter.setTitle("Capture photo",for:.normal); shutter.titleLabel?.font = .preferredFont(forTextStyle:.headline); shutter.backgroundColor = .systemTeal; shutter.tintColor = .black; shutter.layer.cornerRadius = 25; shutter.isEnabled = false; shutter.addTarget(self,action:#selector(capture),for:.touchUpInside)
-        let cancel = UIButton(type:.system); cancel.setTitle("Cancel",for:.normal); cancel.addTarget(self,action:#selector(close),for:.touchUpInside)
-        status.textColor = .white; status.numberOfLines = 0; status.textAlignment = .center
+        shutter.setTitle("Capture photo",for:.normal); shutter.titleLabel?.font = UIFont.preferredFont(forTextStyle:.headline)
+        shutter.backgroundColor = UIColor(Tok.accent); shutter.tintColor = UIColor(Tok.panel)
+        shutter.layer.cornerRadius = 25; shutter.isEnabled = false; shutter.addTarget(self,action:#selector(capture),for:.touchUpInside)
+        let cancel = UIButton(type:.system); cancel.setTitle("Cancel",for:.normal); cancel.titleLabel?.font = shutter.titleLabel?.font
+        cancel.tintColor = UIColor(Tok.panel); cancel.backgroundColor = UIColor(Tok.ink)
+        cancel.layer.cornerRadius = 12
+        cancel.addTarget(self,action:#selector(close),for:.touchUpInside)
+        status.textColor = UIColor(Tok.panel); status.backgroundColor = UIColor(Tok.ink).withAlphaComponent(0.94)
+        status.numberOfLines = 0; status.textAlignment = .center; status.layer.cornerRadius = 12; status.clipsToBounds = true
         for control in [shutter,cancel,status] { control.translatesAutoresizingMaskIntoConstraints = false; view.addSubview(control) }
         NSLayoutConstraint.activate([
             shutter.centerXAnchor.constraint(equalTo:view.centerXAnchor),shutter.bottomAnchor.constraint(equalTo:view.safeAreaLayoutGuide.bottomAnchor,constant:-24),shutter.widthAnchor.constraint(equalToConstant:180),shutter.heightAnchor.constraint(equalToConstant:52),
             cancel.leadingAnchor.constraint(equalTo:view.leadingAnchor,constant:24),cancel.topAnchor.constraint(equalTo:view.safeAreaLayoutGuide.topAnchor,constant:20),
+            cancel.widthAnchor.constraint(greaterThanOrEqualToConstant:80),cancel.heightAnchor.constraint(greaterThanOrEqualToConstant:44),
             status.centerXAnchor.constraint(equalTo:view.centerXAnchor),status.centerYAnchor.constraint(equalTo:view.centerYAnchor),status.widthAnchor.constraint(lessThanOrEqualTo:view.widthAnchor,constant:-40)
         ])
         let session = session; let output = output

@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -17,6 +17,10 @@
 		8DBD256207BCF515EBACFF7F /* ToodleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25907DB3A81884067EF170D6 /* ToodleApp.swift */; };
 		8EAC02DFFFA20F6188AA75AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B6E4491D13AD897A51EDCA /* LaunchScreen.storyboard */; };
 		96ABF12808E9B4F381B3F77A /* NodeDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1D59B2BDDB53FD9AFFF1F8 /* NodeDetailSheet.swift */; };
+		A1B2C3D4E5F60718293A4B01 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B02 /* Theme.swift */; };
+		A1B2C3D4E5F60718293A4B03 /* Effects.metal in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B04 /* Effects.metal */; };
+		A1B2C3D4E5F60718293A4B05 /* BodoniModa.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */; };
+		A1B2C3D4E5F60718293A4B07 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B08 /* OFL.txt */; };
 		A27586724F05CFDB986DCE31 /* AuthGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B982E5F63225622982B8982 /* AuthGateView.swift */; };
 		CC34DE3B91295C3B706CC81D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3D28D586CB17BBDA9314AC /* HomeView.swift */; };
 		D18C58BE61F168B9C35CBA7B /* ToodleCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE1BD844337ECBD35DD68F8 /* ToodleCore */; };
@@ -25,10 +29,6 @@
 		EE9E3E1093BC7F51D9581457 /* DispatchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EA878FB88C389340EBC3F1 /* DispatchSheet.swift */; };
 		F2385B45CBE9E5BF7B7DDEBF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50506EFFCEB65945353A143 /* LoginView.swift */; };
 		FC353224440D7CBCD558B67C /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */; };
-		A1B2C3D4E5F60718293A4B01 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B02 /* Theme.swift */; };
-		A1B2C3D4E5F60718293A4B03 /* Effects.metal in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B04 /* Effects.metal */; };
-		A1B2C3D4E5F60718293A4B05 /* BodoniModa.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */; };
-		A1B2C3D4E5F60718293A4B07 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B08 /* OFL.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,18 +56,19 @@
 		6F60B1358FCA4BC63ADAEAC9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		986A1396F7FEE61A9058E3B5 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		9B982E5F63225622982B8982 /* AuthGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthGateView.swift; sourceTree = "<group>"; };
-		A50506EFFCEB65945353A143 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
-		A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
-		A5EE4DF4FFAF87CD9C2F7272 /* ToodleCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ToodleCore; path = Packages/ToodleCore; sourceTree = SOURCE_ROOT; };
-		BAE0D077528504DB14227262 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
-		D74EA5240505151502E3336E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		E608D3AB1E2D207BEF01C6DC /* CommandCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCenterView.swift; sourceTree = "<group>"; };
-		E814FD9B7C860E0237A022E3 /* Toodle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Toodle.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToodleUITests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B02 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B04 /* Effects.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Effects.metal; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = BodoniModa.ttf; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B08 /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		A50506EFFCEB65945353A143 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
+		A5EE4DF4FFAF87CD9C2F7272 /* ToodleCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ToodleCore; path = Packages/ToodleCore; sourceTree = SOURCE_ROOT; };
+		BAE0D077528504DB14227262 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A60718293A4B10 /* Toodle.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Toodle.entitlements; sourceTree = "<group>"; };
+		D74EA5240505151502E3336E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		E608D3AB1E2D207BEF01C6DC /* CommandCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCenterView.swift; sourceTree = "<group>"; };
+		E814FD9B7C860E0237A022E3 /* Toodle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toodle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToodleUITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +133,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		A1B2C3D4E5F60718293A4B09 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */,
+				A1B2C3D4E5F60718293A4B08 /* OFL.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		AEAA3EFBBA169FE5338E84EC = {
 			isa = PBXGroup;
 			children = (
@@ -185,6 +195,7 @@
 		F7E24A84FAD25489A3AE9480 /* Toodle */ = {
 			isa = PBXGroup;
 			children = (
+				B1C2D3E4F5A60718293A4B10 /* Toodle.entitlements */,
 				6BE5E8D7AFCC212E6BD3F762 /* App */,
 				D61B7F05118984A7CB0CAC83 /* Auth */,
 				EECF21F84C1B514FF82E13FF /* Features */,
@@ -192,15 +203,6 @@
 				717EDFEB3CA76F458601FD99 /* Resources */,
 			);
 			path = Toodle;
-			sourceTree = "<group>";
-		};
-		A1B2C3D4E5F60718293A4B09 /* Fonts */ = {
-			isa = PBXGroup;
-			children = (
-				A1B2C3D4E5F60718293A4B06 /* BodoniModa.ttf */,
-				A1B2C3D4E5F60718293A4B08 /* OFL.txt */,
-			);
-			path = Fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,9 +257,11 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					60A32124C0B80C241FC21C37 = {
+						DevelopmentTeam = JUN9F8332U;
 						ProvisioningStyle = Automatic;
 					};
 					89CAE75F98A3693EFF6224C8 = {
+						DevelopmentTeam = JUN9F8332U;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 60A32124C0B80C241FC21C37;
 					};
@@ -277,7 +281,6 @@
 				CB44169DEC72A12DAC70D637 /* XCRemoteSwiftPackageReference "clerk-ios" */,
 				D06FB06E832E4FAE0A5C3DC2 /* XCLocalSwiftPackageReference "Packages/ToodleCore" */,
 			);
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -407,7 +410,10 @@
 			baseConfigurationReference = 0A188AAA71990C0B5D33DD0D /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Toodle/Toodle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGNING_ALLOWED = YES;
 				DEVELOPMENT_TEAM = JUN9F8332U;
 				INFOPLIST_FILE = Toodle/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -525,7 +531,9 @@
 			baseConfigurationReference = 986A1396F7FEE61A9058E3B5 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Toodle/Toodle.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = JUN9F8332U;
 				INFOPLIST_FILE = Toodle/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

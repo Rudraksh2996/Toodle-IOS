@@ -15,18 +15,22 @@ struct DispatchSheet: View {
     var body: some View {
         NavigationStack {
             VStack(alignment:.leading,spacing:24) {
-                Label(simulated ? "Simulated dispatch" : "Emergency SMS",systemImage:"paperplane.fill").font(.title.bold()).foregroundStyle(simulated ? .teal : .red)
+                Label(simulated ? "Simulated dispatch" : "Emergency SMS",systemImage:"paperplane.fill")
+                    .modifier(KineticFont(weight:700,opsz:30,size:30,style:.title1)).foregroundStyle(Tok.ink)
+                    .padding(Tok.Space.md).textZone()
                 Text("Node: \(node.name)\nFRI: \(node.fri.formatted(.number.precision(.fractionLength(2))))\nDrain: \(node.drainStatus)\nAction: \(blockage ? "Clear visually verified drain blockage." : node.band.action)").frame(maxWidth:.infinity,alignment:.leading).card()
-                if simulated { Text("Demo only. No SMS will be sent.").foregroundStyle(.secondary) }
+                if simulated { Text("Demo only. No SMS will be sent.").foregroundStyle(Tok.inkMuted).card() }
                 TimelineView(.periodic(from:.now,by:1)) { context in
                     let remaining = max(0,Int(ceil(until-context.date.timeIntervalSince1970)))
-                    if let expiry = evidenceExpiresAt, expiry <= context.date { Text("GPS evidence expired. Capture a new photo before sending.").foregroundStyle(.orange) }
-                    if remaining > 0 { Text("Cooldown: \(remaining/60)m \(remaining%60)s").monospacedDigit() }
-                    Button(simulated ? "Simulate dispatch" : "Send emergency SMS") { Task { await send() } }.buttonStyle(.borderedProminent).disabled(busy || remaining > 0 || (!blockage && node.fri < 0.86 && evidenceExpiresAt == nil) || (evidenceExpiresAt.map { $0 <= context.date } ?? false))
+                    if let expiry = evidenceExpiresAt, expiry <= context.date { Text("GPS evidence expired. Capture a new photo before sending.").foregroundStyle(Tok.strongBlue).card() }
+                    if remaining > 0 { Text("Cooldown: \(remaining/60)m \(remaining%60)s").monospacedDigit().card() }
+                    Button(simulated ? "Simulate dispatch" : "Send emergency SMS") { Task { await send() } }.buttonStyle(.toodle).disabled(busy || remaining > 0 || (!blockage && node.fri < 0.86 && evidenceExpiresAt == nil) || (evidenceExpiresAt.map { $0 <= context.date } ?? false))
                 }
-                if busy { ProgressView() }; if !result.isEmpty { Text(result).accessibilityIdentifier("dispatchResult") }
+                if busy { ReactionLoading(title:"Sending…") }; if !result.isEmpty { Text(result).card().accessibilityIdentifier("dispatchResult") }
                 Spacer()
-            }.padding(24).navigationTitle("Dispatch preview").navigationBarTitleDisplayMode(.inline).toolbar { Button("Done") { dismiss() } }
+            }.padding(24).frame(maxWidth:640).frame(maxWidth:.infinity)
+                .serifBody().foregroundStyle(Tok.ink).foilScreen().tint(Tok.accent)
+                .navigationTitle("Dispatch preview").navigationBarTitleDisplayMode(.inline).toolbar { Button("Done") { dismiss() } }
                 .onAppear { until = UserDefaults.standard.double(forKey:key) }
         }
     }

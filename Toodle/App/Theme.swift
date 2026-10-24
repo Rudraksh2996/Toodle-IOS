@@ -1,24 +1,28 @@
 import SwiftUI
 import os
 
-// Design tokens. Colours are OKLCH (source of truth, parsed by scripts/contrast.py and scripts/lint-style.sh),
-// drawn in extended linear sRGB: exact on P3 screens, clipped on sRGB screens (the sRGB fallback).
-// Foil ramp sampled from refs-foil-1/2 (digital renders), blue pixels only, hue clamped to 228-258 (no purple, clear of the logo colour at hue 183).
+// Design tokens. Colours are OKLCH (source of truth, parsed by scripts/style_check.py).
+// PROVISIONAL: sampled from the supplied stylized foil references, not physical raking-light photos.
+// Their pink/violet pixels are excluded; the foil ramp stays in the blue hue range 235...254.
 enum Tok {
     // One light source and one noise field drive every effect.
     static let lightAngle = -2.2
     static let noiseSeed = 0.37
     // Colour: light, dark
-    static let paper = Color.token(.oklch(0.972, 0.010, 240), .oklch(0.170, 0.025, 255))
-    static let panel = Color.token(.oklch(0.992, 0.004, 240), .oklch(0.215, 0.025, 255))
-    static let ink = Color.token(.oklch(0.255, 0.045, 258), .oklch(0.955, 0.010, 240))
-    static let inkMuted = Color.token(.oklch(0.420, 0.035, 255), .oklch(0.800, 0.020, 240))
-    static let accent = Color.token(.oklch(0.420, 0.130, 256), .oklch(0.780, 0.100, 245))
-    static let foil1 = Color.token(.oklch(0.900, 0.040, 236), .oklch(0.300, 0.050, 240))
-    static let foil2 = Color.token(.oklch(0.800, 0.075, 244), .oklch(0.400, 0.080, 246))
-    static let foil3 = Color.token(.oklch(0.700, 0.110, 250), .oklch(0.520, 0.110, 250))
-    static let foil4 = Color.token(.oklch(0.580, 0.090, 258), .oklch(0.620, 0.100, 256))
-    static let glint = Color.token(.oklch(0.840, 0.110, 228), .oklch(0.780, 0.110, 228))
+    static let paper = Color.token(.oklch(0.981, 0.006, 252), .oklch(0.170, 0.025, 250))
+    static let panel = Color.token(.oklch(0.992, 0.004, 250), .oklch(0.215, 0.025, 250))
+    static let ink = Color.token(.oklch(0.255, 0.045, 250), .oklch(0.955, 0.010, 245))
+    static let inkMuted = Color.token(.oklch(0.420, 0.035, 250), .oklch(0.800, 0.020, 245))
+    static let accent = Color.token(.oklch(0.420, 0.125, 250), .oklch(0.780, 0.090, 245))
+    static let quietBlue = Color.token(.oklch(0.910, 0.025, 250), .oklch(0.310, 0.045, 245))
+    static let line = Color.token(.oklch(0.810, 0.025, 250), .oklch(0.450, 0.040, 245))
+    static let strongBlue = Color.token(.oklch(0.320, 0.110, 250), .oklch(0.860, 0.065, 245))
+    static let logoTeal = Color.token(.oklch(0.350, 0.090, 183), .oklch(0.780, 0.100, 183))
+    static let foil1 = Color.token(.oklch(0.835, 0.041, 254), .oklch(0.300, 0.050, 242))
+    static let foil2 = Color.token(.oklch(0.747, 0.105, 250), .oklch(0.400, 0.080, 246))
+    static let foil3 = Color.token(.oklch(0.699, 0.060, 250), .oklch(0.520, 0.100, 250))
+    static let foil4 = Color.token(.oklch(0.534, 0.110, 250), .oklch(0.620, 0.090, 250))
+    static let glint = Color.token(.oklch(0.900, 0.045, 235), .oklch(0.780, 0.095, 235))
     static let panelOpacity = 0.94
     static let foilStrength = 0.55
     // Glass, noise, grid
@@ -57,25 +61,40 @@ extension Color {
     func resolved(_ env: EnvironmentValues) -> Color { Color(resolve(in:env)) }
 }
 
+private struct ToodleTransitionProgressKey: EnvironmentKey { static let defaultValue = 1.0 }
+extension EnvironmentValues {
+    var toodleTransitionProgress: Double {
+        get { self[ToodleTransitionProgressKey.self] }
+        set { self[ToodleTransitionProgressKey.self] = newValue }
+    }
+}
+
 // 3. Glass text zone: near-opaque paper so text never sits on foil, thin-film edge, anisotropic highlight.
 extension View {
     func textZone(radius: Double = Tok.Radius.lg) -> some View {
         let shape = RoundedRectangle(cornerRadius:radius,style:.continuous)
         return background(Tok.panel.opacity(Tok.panelOpacity),in:shape).overlay(shape.strokeBorder(Tok.thinFilm.opacity(0.7),lineWidth:1)).overlay(shape.strokeBorder(Tok.sheen,lineWidth:1.5).blendMode(.plusLighter))
     }
+    func foilScreen() -> some View { background { Backdrop() } }
+    func serifBody() -> some View { modifier(KineticFont(weight:450,opsz:16,size:16,style:.body)) }
+    func serifCaption() -> some View { modifier(KineticFont(weight:500,opsz:13,size:13,style:.caption1)) }
 }
 
-// 9. Kinetic serif: animates the wght/opsz axes. Fonts are cached per quantised axis value.
+// 9. Native system font. Size is still scaled by Dynamic Type in KineticFont; the weight is mapped to SwiftUI's Font.Weight.
 enum Serif {
-    private static var cache: [String: Font] = [:]
     static func font(size: Double, weight: Double, opsz: Double) -> Font {
-        let w = (weight / 10).rounded() * 10, o = opsz.rounded(), s = size.rounded()
-        let key = "\(s)-\(w)-\(o)"
-        if let font = cache[key] { return font }
-        let descriptor = UIFontDescriptor(name:Tok.Face.postScript,size:s).addingAttributes([UIFontDescriptor.AttributeName(rawValue:kCTFontVariationAttribute as String):[Tok.Face.wght:w,Tok.Face.opsz:o]])
-        let font = Font(UIFont(descriptor:descriptor,size:s) as CTFont)
-        cache[key] = font
-        return font
+        .system(size: size.rounded(), weight: fontWeight(weight))
+    }
+    private static func fontWeight(_ value: Double) -> Font.Weight {
+        switch value {
+        case ..<350: .light
+        case ..<450: .regular
+        case ..<550: .medium
+        case ..<650: .semibold
+        case ..<750: .bold
+        case ..<850: .heavy
+        default: .black
+        }
     }
 }
 struct KineticFont: ViewModifier, Animatable {
@@ -98,17 +117,21 @@ struct KineticText: View {
     var extrude = false
     var kinetic = true
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.toodleTransitionProgress) private var transitionProgress
     @State private var settled = false
     init(_ text: String, size: Double, style: UIFont.TextStyle, weight: Double = 600, extrude: Bool = false, kinetic: Bool = true) { self.text = text; self.size = size; self.style = style; self.weight = weight; self.extrude = extrude; self.kinetic = kinetic }
     var body: some View {
         let done = settled || reduceMotion || !kinetic
         let font = KineticFont(weight:done ? weight : Tok.Face.weights.lowerBound,opsz:done ? size * 1.6 : Tok.Face.sizes.lowerBound,size:size,style:style)
-        Text(text).modifier(font).foregroundStyle(Tok.ink)
+        let content = Text(text).modifier(font).foregroundStyle(Tok.ink)
             .background(alignment:.topLeading) {
                 if extrude { ZStack(alignment:.topLeading) { ForEach(1..<5) { i in Text(text).modifier(font).foregroundStyle(Tok.foil4.opacity(0.32 - Double(i) * 0.06)).offset(x:-cos(Tok.lightAngle) * Double(i) * 0.8,y:-sin(Tok.lightAngle) * Double(i) * 0.8) } }.accessibilityHidden(true) }
             }
             .onAppear { withAnimation(Tok.viscous(Tok.Duration.slow)) { settled = true } }
             .onChange(of:text) { settled = false; Task { withAnimation(Tok.viscous(Tok.Duration.slow)) { settled = true } } }
+        if kinetic && !reduceMotion && transitionProgress > 0.001 && transitionProgress < 0.999 {
+            content.distortionEffect(ShaderLibrary.typeDisplace(.float(transitionProgress),.float(Tok.noiseSeed)),maxSampleOffset:CGSize(width:4,height:4))
+        } else { content }
     }
 }
 
@@ -119,12 +142,14 @@ struct ToodleButtonStyle: ButtonStyle {
         let configuration: Configuration
         @Environment(\.isEnabled) private var enabled
         @Environment(\.isFocused) private var focused
+        @Environment(\.accessibilityReduceMotion) private var reduceMotion
         var body: some View {
-            configuration.label.foregroundStyle(Tok.panel)
-                .background { ZStack { Capsule().fill(Tok.ink.opacity(enabled ? 1 : 0.4)); if configuration.isPressed || focused { Caustics().clipShape(Capsule()) } } }
+            configuration.label.serifBody().padding(.horizontal,20).padding(.vertical,12)
+                .frame(minHeight:44).foregroundStyle(enabled ? Tok.panel : Tok.ink)
+                .background { ZStack { Capsule().fill(enabled ? Tok.ink : Tok.quietBlue); if enabled && (configuration.isPressed || focused) { Caustics().clipShape(Capsule()) } } }
                 .overlay { if focused { ZStack { Capsule().strokeBorder(Tok.panel,lineWidth:2).padding(-2); Capsule().strokeBorder(Tok.accent,lineWidth:2).padding(-4) } } }
-                .scaleEffect(configuration.isPressed ? 0.97 : 1)
-                .animation(Tok.viscous(Tok.Duration.quick),value:configuration.isPressed)
+                .scaleEffect(!reduceMotion && configuration.isPressed ? 0.97 : 1)
+                .animation(reduceMotion ? nil : Tok.viscous(Tok.Duration.quick),value:configuration.isPressed)
                 .hoverEffect(.lift)
         }
     }
@@ -144,8 +169,8 @@ struct Caustics: View {
     }
 }
 
-// Quality tiers: p95 of display-link frame intervals over 120 frames. Downgrade when p95 > 1.5x budget
-// (more than 5% dropped frames); recover after 5 clean windows (~10 s). Launch arg `-ToodleTier low|medium|high` pins it.
+// Quality tiers: p95 of display-link frame intervals over 120 frames. The 0.2 ms tolerance
+// accounts for a 60 Hz display's nominal 16.67 ms interval; recover after five clean windows.
 @Observable final class Quality: NSObject {
     enum Tier: Int, Comparable { case low, medium, high; static func < (a: Tier, b: Tier) -> Bool { a.rawValue < b.rawValue } }
     static let shared = Quality()
@@ -179,8 +204,8 @@ struct Caustics: View {
         p95 = sorted[Int(Double(sorted.count) * 0.95)]
         log.info("p95 \(self.p95, format:.fixed(precision:1)) ms tier \(self.tier.rawValue)")
         guard !pinned else { return }
-        if p95 > Tok.frameBudget * 1.5, tier > .low { tier = Tier(rawValue:tier.rawValue - 1)!; clean = 0 }
-        else if p95 <= Tok.frameBudget * 1.1 { clean += 1; if clean >= 5, tier < .high { tier = Tier(rawValue:tier.rawValue + 1)!; clean = 0 } }
+        if p95 > Tok.frameBudget + 0.2, tier > .low { tier = Tier(rawValue:tier.rawValue - 1)!; clean = 0 }
+        else if p95 <= Tok.frameBudget { clean += 1; if clean >= 5, tier < .high { tier = Tier(rawValue:tier.rawValue + 1)!; clean = 0 } }
     }
 }
 
@@ -235,6 +260,60 @@ struct Backdrop: View {
             if i == 1, let hover { x += (hover.x - x) * MetaballTok.hoverPull; y += (hover.y - y) * MetaballTok.hoverPull }
             return [Float(x),Float(y),Float(b.r * scale)]
         }
+    }
+}
+
+struct WaterTransition: View {
+    var progress: Double
+    @Environment(\.self) private var env
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var quality = Quality.shared
+    var body: some View {
+        GeometryReader { geometry in
+            if reduceMotion { Color.clear }
+            else if quality.tier == .low {
+                Tok.paper.opacity(1 - abs(2 * progress - 1))
+            } else {
+                Rectangle().fill(.white).colorEffect(ShaderLibrary.flowField(
+                    .float2(geometry.size),.float(progress),.float(Tok.lightAngle),.float(Tok.noiseSeed),
+                    .color(Tok.foil1.resolved(env)),.color(Tok.foil4.resolved(env))))
+            }
+        }.ignoresSafeArea().allowsHitTesting(false).accessibilityHidden(true)
+    }
+}
+
+private struct WaterEntrance: ViewModifier {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var progress = 0.5
+    func body(content: Content) -> some View {
+        content.environment(\.toodleTransitionProgress,progress)
+            .overlay { WaterTransition(progress:progress) }
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(Tok.viscous(Tok.Duration.transition / 2)) { progress = 1 }
+            }
+    }
+}
+extension View {
+    func waterEntrance() -> some View { modifier(WaterEntrance()) }
+}
+
+// The baked Gray–Scott mask is used only while an existing operation is loading.
+struct ReactionLoading: View {
+    var title = "Loading…"
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var rotation = 0.0
+    var body: some View {
+        HStack(spacing:Tok.Space.sm) {
+            Image("ReactionPattern").resizable().renderingMode(.template)
+                .foregroundStyle(Tok.accent).frame(width:32,height:32)
+                .rotationEffect(.degrees(rotation)).accessibilityHidden(true)
+            Text(title).serifCaption()
+        }.accessibilityElement(children:.ignore).accessibilityLabel(title)
+            .onAppear {
+                guard !reduceMotion else { return }
+                withAnimation(Tok.viscous(Tok.Duration.ambient)) { rotation = 120 }
+            }
     }
 }
 

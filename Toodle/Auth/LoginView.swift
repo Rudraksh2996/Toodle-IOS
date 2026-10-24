@@ -39,60 +39,67 @@ struct LoginView: View {
     var body: some View {
         ScrollView {
             VStack(alignment:.leading,spacing:22) {
-                Image(systemName:"drop.fill").font(.system(size:44)).foregroundStyle(Tok.accent)
-                Text(codePhase == nil ? "Welcome to Toodle" : "Check your email").font(.largeTitle.bold())
-                Text(codePhase == nil ? "Sign in to monitor the city." : "Enter the code we sent to \(cleanEmail).")
-                    .foregroundStyle(.secondary)
+                VStack(alignment:.leading,spacing:12) {
+                    Image("toodle-logo-teal").renderingMode(.template).resizable().scaledToFit()
+                        .foregroundStyle(Tok.logoTeal).frame(width:96,height:64)
+                    KineticText(codePhase == nil ? "Welcome to Toodle" : "Check your email",size:36,style:.largeTitle,extrude:true)
+                    Text(codePhase == nil ? "Sign in to monitor the city." : "Enter the code we sent to \(cleanEmail).")
+                        .foregroundStyle(Tok.inkMuted)
+                }.frame(maxWidth:.infinity,alignment:.leading).padding(Tok.Space.lg).textZone()
                 if codePhase == nil { credentialsForm }
                 else { verificationForm }
             }.padding(24).frame(maxWidth:480).frame(maxWidth:.infinity)
-        }.background(Color(.systemGroupedBackground))
+        }.serifBody().foregroundStyle(Tok.ink).foilScreen().tint(Tok.accent)
     }
 
     private var credentialsForm: some View {
         VStack(alignment:.leading,spacing:16) {
             HStack {
-                Text("Email").font(.headline)
+            Text("Email").modifier(KineticFont(weight:650,opsz:17,size:17,style:.headline))
                 Spacer()
             }
-            TextField("you@example.com",text:$email)
+            TextField("you@example.com",text:$email,prompt:Text("you@example.com").foregroundStyle(Tok.inkMuted))
                 .keyboardType(.emailAddress).textContentType(.emailAddress)
                 .textInputAutocapitalization(.never).autocorrectionDisabled()
-                .textFieldStyle(.roundedBorder).accessibilityLabel("Email address")
+                .textFieldStyle(.plain).foregroundStyle(Tok.ink).padding(10)
+                .background(Tok.panel,in:RoundedRectangle(cornerRadius:8))
+                .overlay(RoundedRectangle(cornerRadius:8).strokeBorder(Tok.line,lineWidth:1))
+                .accessibilityLabel("Email address")
             if !email.isEmpty && !validEmail {
-                Text("Enter a valid email address.").font(.caption).foregroundStyle(.red)
+                Text("Enter a valid email address.").serifCaption().foregroundStyle(Tok.strongBlue)
                     .accessibilityIdentifier("emailError")
             }
-            Text("Password").font(.headline)
+            Text("Password").modifier(KineticFont(weight:650,opsz:17,size:17,style:.headline))
             HStack {
                 Group {
-                    if showPassword { TextField("Password",text:$password) }
-                    else { SecureField("Password",text:$password) }
+                    if showPassword { TextField("Password",text:$password,prompt:Text("Password").foregroundStyle(Tok.inkMuted)) }
+                    else { SecureField("Password",text:$password,prompt:Text("Password").foregroundStyle(Tok.inkMuted)) }
                 }.textContentType(mode == .signUp ? .newPassword : .password)
                     .textInputAutocapitalization(.never).autocorrectionDisabled()
-                    .accessibilityLabel("Password")
+                    .foregroundStyle(Tok.ink).accessibilityLabel("Password")
                 Button(showPassword ? "Hide" : "Show") { showPassword.toggle() }
                     .accessibilityLabel(showPassword ? "Hide password" : "Show password")
-            }.padding(10).background(Color(.secondarySystemGroupedBackground),in:RoundedRectangle(cornerRadius:8))
+            }.padding(10).background(Tok.panel,in:RoundedRectangle(cornerRadius:8))
+                .overlay(RoundedRectangle(cornerRadius:8).strokeBorder(Tok.line,lineWidth:1))
             if mode == .signUp {
                 VStack(alignment:.leading,spacing:6) {
                     ForEach(passwordRules,id:\.0) { title,passed in
                         Label(title,systemImage:passed ? "checkmark.circle.fill" : "circle")
-                            .font(.caption).foregroundStyle(passed ? Color.green : Color.secondary)
+                            .serifCaption().foregroundStyle(passed ? Tok.accent : Tok.inkMuted)
                     }
                 }.accessibilityElement(children:.combine)
-                Text("Confirm password").font(.headline)
-                if showPassword { TextField("Confirm password",text:$confirmPassword).textFieldStyle(.roundedBorder) }
-                else { SecureField("Confirm password",text:$confirmPassword).textFieldStyle(.roundedBorder) }
+                Text("Confirm password").modifier(KineticFont(weight:650,opsz:17,size:17,style:.headline))
+                if showPassword { TextField("Confirm password",text:$confirmPassword,prompt:Text("Confirm password").foregroundStyle(Tok.inkMuted)).foregroundStyle(Tok.ink).textFieldStyle(.roundedBorder) }
+                else { SecureField("Confirm password",text:$confirmPassword,prompt:Text("Confirm password").foregroundStyle(Tok.inkMuted)).foregroundStyle(Tok.ink).textFieldStyle(.roundedBorder) }
                 if !confirmPassword.isEmpty && confirmPassword != password {
-                    Text("Passwords do not match.").font(.caption).foregroundStyle(.red)
+                    Text("Passwords do not match.").serifCaption().foregroundStyle(Tok.strongBlue)
                 }
             }
             if !errorMessage.isEmpty { errorText }
             Button(mode == .signUp ? "Sign Up" : "Log In") { Task { await submit() } }
-                .buttonStyle(.borderedProminent).tint(Tok.accent).frame(maxWidth:.infinity)
+                .buttonStyle(.toodle).frame(maxWidth:.infinity)
                 .disabled(!canSubmit).accessibilityIdentifier("authSubmit")
-            if busy { ProgressView("Please wait…") }
+            if busy { ReactionLoading(title:"Please wait…") }
             Button(mode == .signUp ? "Already have an account? Log In" : "New to Toodle? Sign Up") {
                 mode = mode == .signUp ? .logIn : .signUp
                 password = ""; confirmPassword = ""; errorMessage = ""; showPassword = false
@@ -102,21 +109,21 @@ struct LoginView: View {
 
     private var verificationForm: some View {
         VStack(alignment:.leading,spacing:16) {
-            TextField("Email code",text:$code)
+            TextField("Email code",text:$code,prompt:Text("Email code").foregroundStyle(Tok.inkMuted))
                 .keyboardType(.numberPad).textContentType(.oneTimeCode)
-                .textFieldStyle(.roundedBorder).accessibilityLabel("Email verification code")
+                .foregroundStyle(Tok.ink).textFieldStyle(.roundedBorder).accessibilityLabel("Email verification code")
             if !errorMessage.isEmpty { errorText }
             Button("Verify Email") { Task { await verifyCode() } }
-                .buttonStyle(.borderedProminent).tint(Tok.accent)
+                .buttonStyle(.toodle)
                 .disabled(code.trimmingCharacters(in:.whitespacesAndNewlines).isEmpty || busy)
             Button("Resend code") { Task { await resendCode() } }.disabled(busy)
             Button("Back") { codePhase = nil; code = ""; errorMessage = "" }.disabled(busy)
-            if busy { ProgressView("Please wait…") }
+            if busy { ReactionLoading(title:"Please wait…") }
         }.card()
     }
 
     private var errorText: some View {
-        Text(errorMessage).font(.callout).foregroundStyle(.red)
+        Text(errorMessage).foregroundStyle(Tok.strongBlue)
             .accessibilityIdentifier("authError")
     }
 
