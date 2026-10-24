@@ -57,7 +57,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcrun swift test --pack
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
   -project Toodle.xcodeproj -scheme Toodle \
   -destination 'platform=iOS Simulator,name=iPhone 18 Pro' \
-  CODE_SIGNING_ALLOWED=NO build
+  build
 ```
 
 If several simulators share a name, use a UUID from `xcrun simctl list devices available` in the destination.

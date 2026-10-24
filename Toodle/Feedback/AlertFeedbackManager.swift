@@ -90,7 +90,7 @@ private struct FeedbackPopupModifier: ViewModifier {
         guard overlayWindow == nil, let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first(where:{ $0.activationState == .foregroundActive }) else { return }
         let window = UIWindow(windowScene:scene)
         window.windowLevel = .alert + 1
-        window.backgroundColor = .clear
+        window.backgroundColor = UIColor.clear
         window.rootViewController = UIHostingController(rootView:FeedbackOverlayView().environment(feedback).environment(Clerk.shared))
         window.isHidden = false
         overlayWindow = window
@@ -104,7 +104,7 @@ extension View {
 private struct FeedbackOverlayView: View {
     var body: some View {
         ZStack {
-            Color.black.opacity(0.45).ignoresSafeArea()
+            Tok.ink.opacity(0.55).ignoresSafeArea()
             FeedbackPopupView().padding(24)
         }.frame(maxWidth:.infinity,maxHeight:.infinity)
     }
@@ -119,26 +119,26 @@ private struct FeedbackPopupView: View {
         VStack(spacing:18) {
             switch feedback.stage {
             case .question:
-                Text("Was action taken by the authorities?").font(.title2.bold()).multilineTextAlignment(.center)
+                KineticText("Was action taken by the authorities?",size:27,style:.title2,weight:700,kinetic:false).multilineTextAlignment(.center)
                 HStack(spacing:16) {
-                    Button("Yes") { feedback.stage = .thankYou }.buttonStyle(.borderedProminent)
+                    Button("Yes") { feedback.stage = .thankYou }.buttonStyle(.toodle)
                     Button("No") { feedback.stage = .offerResend }.buttonStyle(.bordered)
                 }
             case .thankYou:
-                Text("Thank you").font(.title2.bold())
-                Button("Done") { feedback.dismiss() }.buttonStyle(.borderedProminent)
+                KineticText("Thank you",size:27,style:.title2,weight:700)
+                Button("Done") { feedback.dismiss() }.buttonStyle(.toodle)
             case .offerResend:
-                Text("No action yet?").font(.title2.bold())
-                Text("You can send the test alert again.").multilineTextAlignment(.center).foregroundStyle(.secondary)
-                Button("Send test alert again") { Task { await resend() } }.buttonStyle(.borderedProminent).disabled(busy)
+                KineticText("No action yet?",size:27,style:.title2,weight:700,kinetic:false)
+                Text("You can send the test alert again.").multilineTextAlignment(.center).foregroundStyle(Tok.inkMuted)
+                Button("Send test alert again") { Task { await resend() } }.buttonStyle(.toodle).disabled(busy)
                 Button("Cancel") { feedback.dismiss() }.disabled(busy)
             case nil: EmptyView()
             }
-            if busy { ProgressView() }
-            if !error.isEmpty { Text(error).font(.caption).foregroundStyle(.red).multilineTextAlignment(.center) }
+            if busy { ReactionLoading(title:"Sending…") }
+            if !error.isEmpty { Text(error).serifCaption().foregroundStyle(Tok.strongBlue).multilineTextAlignment(.center) }
         }
         .padding(24).frame(maxWidth:400)
-        .background(Color(.systemGroupedBackground),in:RoundedRectangle(cornerRadius:24)).tint(Tok.accent)
+        .serifBody().foregroundStyle(Tok.ink).textZone(radius:24).tint(Tok.accent)
     }
     private func resend() async {
         guard !busy else { return }

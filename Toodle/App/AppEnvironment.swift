@@ -6,9 +6,12 @@ struct LiveRiskSample: Identifiable {
     let score: Double
 }
 @MainActor @Observable final class AppEnvironment {
-    var nodes = StormSimulator.nodes(stage: .clear)
+    // Live nodes from the backend. Simulated nodes are kept apart so a storm simulation never overwrites live data.
+    var liveNodes = StormSimulator.nodes(stage: .clear)
+    var simulatedNodes: [Node] = []
     var source = "Offline demo data"
     var stage: StormStage?
+    var nodes: [Node] { stage == nil ? liveNodes : simulatedNodes }
     var playing = false
     var tab = 0
     var syncToCloud = false
@@ -26,11 +29,11 @@ struct LiveRiskSample: Identifiable {
     var sorted: [Node] { nodes.sorted { $0.fri == $1.fri ? $0.id < $1.id : $0.fri > $1.fri } }
     var simulated: Bool { offline || stage != nil || source != "Live" }
     func refresh() async {
-        guard stage == nil else { return }
         do {
             let (values,label) = try await client.nodes()
-            guard stage == nil, !Task.isCancelled else { return }
-            nodes = values; source = label
+            guard !Task.isCancelled else { return }
+            liveNodes = values
+            if stage == nil { source = label }
             if label == "Live" {
                 let now = Date()
                 for node in values {
@@ -38,16 +41,20 @@ struct LiveRiskSample: Identifiable {
                 }
             }
         }
-        catch { guard stage == nil, !Task.isCancelled else { return }; nodes = StormSimulator.nodes(stage:.clear); source = "Offline demo data" }
+        catch { guard !Task.isCancelled else { return }; liveNodes = StormSimulator.nodes(stage:.clear); if stage == nil { source = "Offline demo data" } }
     }
     func setStage(_ value: StormStage) {
-        stage = value; source = "Offline demo data"
-        withAnimation(UIAccessibility.isReduceMotionEnabled ? nil : .spring()) { nodes = StormSimulator.nodes(stage:value) }
+        stage = value; source = "Simulation · \(value.rawValue)"
+        simulatedNodes = StormSimulator.nodes(stage:value)
         UIImpactFeedbackGenerator(style:.medium).impactOccurred()
         if syncToCloud && !offline {
-            let values = nodes; let api = client
+            let values = simulatedNodes; let api = client
             Task { do { for node in values { try await api.sync(node:node) }; message = "Simulation telemetry synced" } catch { message = error.localizedDescription } }
         }
+    }
+    func resumeLive() {
+        stop(); stage = nil; simulatedNodes = []; source = "Connecting…"
+        Task { await refresh() }
     }
     func play() {
         stop(); playing = true
@@ -55,12 +62,28 @@ struct LiveRiskSample: Identifiable {
     }
     func stop() { sequence?.cancel(); sequence = nil; playing = false }
 }
-extension RiskBand { var color: Color { Color(red:Double((hex >> 16) & 255)/255,green:Double((hex >> 8) & 255)/255,blue:Double(hex & 255)/255) } }
+extension RiskBand {
+    // Band colours: green (normal), yellow (advisory), orange (warning), red (critical). The band name is still printed beside them.
+    var color: Color { Color(red:Double((hex >> 16) & 255)/255,green:Double((hex >> 8) & 255)/255,blue:Double(hex & 255)/255) }
+    var symbol: String {
+        switch self {
+        case .normal: "checkmark.shield"
+        case .advisory: "eye"
+        case .warning: "exclamationmark.triangle"
+        case .critical: "exclamationmark.octagon.fill"
+        }
+    }
+}
 extension View {
     func card() -> some View { padding(Tok.Space.md).textZone() }
 }
 struct RiskBadge: View {
     let node: Node
-    var body: some View { Text(node.band.rawValue).font(.caption.bold()).foregroundStyle(node.band.color).padding(7).background(node.band.color.opacity(0.12),in:Capsule()) }
+    var body: some View {
+        Label(node.band.rawValue,systemImage:node.band.symbol)
+            .serifCaption().foregroundStyle(Tok.ink).padding(.horizontal,10).padding(.vertical,7)
+            .background(Tok.quietBlue,in:Capsule())
+            .overlay(Capsule().strokeBorder(node.band.color,lineWidth:1.5))
+    }
 }
 #Preview { RiskBadge(node:SeedNodes.all[0]) }

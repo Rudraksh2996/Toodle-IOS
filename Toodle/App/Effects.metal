@@ -126,3 +126,27 @@ static half4 chrome(float2 pos, float f, float2 grad, float angle, half3 refract
     float a = saturate(c * 0.25 + edge * 0.6) * float(color.a);
     return half4(spectral * half(a), half(a));
 }
+
+// Full-screen water cover for tab changes. It fills, then drains within one 1.1 s cycle.
+[[ stitchable ]] half4 flowField(float2 pos, half4 color, float2 size, float progress, float angle, float seed,
+                                half4 pale, half4 deep) {
+    if (progress <= 0.001 || progress >= 0.999) return half4(0);
+    float2 uv = pos / max(size.y, 1.0);
+    float2 direction = float2(cos(angle), sin(angle));
+    float wave = fbm(uv * 2.5 + direction * progress * 0.8, seed);
+    float displacement = 0.18 * (wave - 0.5) + 0.06 * sin(uv.y * 12.0 + wave * 4.0);
+    float phase = progress <= 0.5 ? progress * 2.0 : (1.0 - progress) * 2.0;
+    float edge = uv.x / max(size.x / max(size.y, 1.0), 0.001) + displacement;
+    float alpha = phase >= 0.999 ? 1.0 : smoothstep(edge - 0.12, edge + 0.12, phase * 1.2);
+    float shade = saturate(0.25 + 0.55 * wave + 0.2 * dot(direction, normalize(float2(1.0, 0.4))));
+    half3 blue = mix(pale.rgb, deep.rgb, half(shade));
+    return half4(blue * half(alpha), half(alpha));
+}
+
+// Type displacement is active only during a screen transition; body copy never uses it.
+[[ stitchable ]] float2 typeDisplace(float2 pos, float progress, float seed) {
+    float amplitude = sin(progress * M_PI_F) * 3.0;
+    float x = vnoise(pos * 0.045, seed) - 0.5;
+    float y = vnoise(pos * 0.045 + float2(17.0, 31.0), seed) - 0.5;
+    return pos + float2(x, y) * amplitude;
+}

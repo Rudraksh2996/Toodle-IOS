@@ -97,7 +97,9 @@ def contrast_report():
             rows.append(f"{name:5}  {worst:5.2f}:1  (need {need}:1)  {label}")
             if worst < need:
                 failures.append(f"contrast {name}: {label} {worst:.2f}:1 < {need}:1")
-    for k, (light, dark) in t.items():  # no purple, and spectral hues stay clear of logo teal (h=183)
+    for k, (light, dark) in t.items():  # the logo alone keeps its teal token
+        if k == "logoTeal":
+            continue
         for l, c, h in (light, dark):
             if c >= 0.03 and not 225 <= h <= 262:
                 failures.append(f"palette: {k} hue {h} outside blue range 225-262")

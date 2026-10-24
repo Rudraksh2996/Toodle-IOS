@@ -42,7 +42,10 @@ public struct LiveAPIClient: APIClient {
         let (data, _) = try await request("/api/analyze", body: body); return try Wire.analysis(data)
     }
     public func dispatch(node: Node, blockage: Bool) async throws -> DispatchResult {
-        let (data, _) = try await request("/api/dispatch", body: ["nodeId":node.id,"nodeName":node.name,"fri":node.fri,"drainStatus":node.drainStatus,"action":node.band.action,"blockageDetected":blockage,"screenDetected":false])
+        var body: [String: Any] = ["nodeId":node.id,"nodeName":node.name,"fri":node.fri,"drainStatus":node.drainStatus,"action":node.band.action,"blockageDetected":blockage,"screenDetected":false]
+        // Field captures send a clogged-road help request with the capture coordinates.
+        if node.id.hasPrefix("field-") { body["kind"] = "field"; body["latitude"] = node.lat; body["longitude"] = node.lng }
+        let (data, _) = try await request("/api/dispatch", body: body)
         return try JSONDecoder().decode(DispatchResult.self, from: data)
     }
     public func sync(node: Node) async throws { _ = try await request("/api/nodes", body: ["nodeId":node.id,"fri":node.fri,"v_pooling":node.v,"a_impedance":node.a,"rain_rate":node.r,"r_rate":node.r,"drainStatus":node.drainStatus]) }
