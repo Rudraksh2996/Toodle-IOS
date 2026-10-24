@@ -6,6 +6,7 @@ struct DispatchSheet: View {
     var blockage = false
     var evidenceExpiresAt: Date? = nil
     @Environment(AppEnvironment.self) private var app
+    @Environment(AlertFeedbackManager.self) private var feedback
     @Environment(\.dismiss) private var dismiss
     @State private var busy = false
     @State private var result = ""
@@ -34,7 +35,7 @@ struct DispatchSheet: View {
         busy = true; defer { busy = false }
         do {
             let api: any APIClient = simulated ? MockAPIClient() : app.client
-            let response = try await api.dispatch(node:node,blockage:blockage)
+            let response = try await feedback.send(api:api,node:node,blockage:blockage,baseURL:app.baseURL,simulated:simulated)
             guard response.success else { result = "Dispatch was not accepted."; return }
             result = "\(simulated ? "Simulated" : "Accepted") · \(response.messageId ?? "No message ID returned")"
             until = response.cooldownUntil ?? Date().timeIntervalSince1970 + 900

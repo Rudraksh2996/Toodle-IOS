@@ -1,3 +1,5 @@
 API_BASE_URL = https:/$()/main.d8ovyga5ca3ks.amplifyapp.com
+CLERK_PUBLISHABLE_KEY = YOUR_CLERK_PUBLISHABLE_KEY
+#include? "Clerk.local.xcconfig"
 SWIFT_VERSION = 5.0
 IPHONEOS_DEPLOYMENT_TARGET = 17.0

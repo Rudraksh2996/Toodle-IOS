@@ -6,6 +6,9 @@ options:
 packages:
   ToodleCore:
     path: Packages/ToodleCore
+  Clerk:
+    url: https://github.com/clerk/clerk-ios
+    from: 1.6.1
 configs:
   Debug: debug
   Release: release
@@ -30,6 +33,8 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     dependencies:
       - package: ToodleCore
+      - package: Clerk
+        product: ClerkKit
   ToodleUITests:
     type: bundle.ui-testing
     platform: iOS

@@ -1,7 +1,22 @@
 import XCTest
 final class ToodleUITests: XCTestCase {
-    func testOfflineWalkthrough() {
+    func testLoginGateValidation() throws {
         let app = XCUIApplication(); app.launchArguments = ["--uitesting"]; app.launch()
+        guard app.staticTexts["Welcome to Toodle"].waitForExistence(timeout:10) else {
+            throw XCTSkip("An authenticated Clerk session is already active")
+        }
+        let email = app.textFields["Email address"]
+        XCTAssertTrue(email.exists)
+        email.tap(); email.typeText("invalid-email")
+        XCTAssertTrue(app.staticTexts["emailError"].exists)
+        XCTAssertFalse(app.buttons["authSubmit"].isEnabled)
+    }
+
+    func testOfflineWalkthrough() throws {
+        let app = XCUIApplication(); app.launchArguments = ["--uitesting"]; app.launch()
+        if app.staticTexts["Welcome to Toodle"].waitForExistence(timeout:3) {
+            throw XCTSkip("Offline walkthrough requires an authenticated Clerk test session")
+        }
         XCTAssertTrue(app.buttons["Open Command Center"].waitForExistence(timeout:10)); app.buttons["Open Command Center"].tap()
         XCTAssertTrue(app.buttons["playStorm"].waitForExistence(timeout:10))
         app.swipeUp()

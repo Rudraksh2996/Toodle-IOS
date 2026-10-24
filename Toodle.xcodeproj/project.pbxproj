@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 63;
+	objectVersion = 77;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		09A4BE8F56AB3F492590006F /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAE0D077528504DB14227262 /* AppEnvironment.swift */; };
+		1A7EFEE81C55F1AD8322A5EA /* ClerkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 592184F4626ADDDB325039B0 /* ClerkKit */; };
 		2298F1E54747E4953A45B7B3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 625062973E7C7D027DCCE59F /* Assets.xcassets */; };
 		2D36EA7A20797D8F021ECC22 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D74EA5240505151502E3336E /* CameraView.swift */; };
 		301D4FF71674B7B0C95827BD /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F60B1358FCA4BC63ADAEAC9 /* SettingsView.swift */; };
@@ -16,10 +17,13 @@
 		8DBD256207BCF515EBACFF7F /* ToodleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25907DB3A81884067EF170D6 /* ToodleApp.swift */; };
 		8EAC02DFFFA20F6188AA75AA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 01B6E4491D13AD897A51EDCA /* LaunchScreen.storyboard */; };
 		96ABF12808E9B4F381B3F77A /* NodeDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F1D59B2BDDB53FD9AFFF1F8 /* NodeDetailSheet.swift */; };
+		A27586724F05CFDB986DCE31 /* AuthGateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B982E5F63225622982B8982 /* AuthGateView.swift */; };
 		CC34DE3B91295C3B706CC81D /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3D28D586CB17BBDA9314AC /* HomeView.swift */; };
 		D18C58BE61F168B9C35CBA7B /* ToodleCore in Frameworks */ = {isa = PBXBuildFile; productRef = 5FE1BD844337ECBD35DD68F8 /* ToodleCore */; };
+		E08B1D454EC7EFCA7F2A0396 /* AlertFeedbackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F72779CE226D04830DA9CCE /* AlertFeedbackManager.swift */; };
 		EA7E26EF80101CAD1AD4EA68 /* ToodleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */; };
 		EE9E3E1093BC7F51D9581457 /* DispatchSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01EA878FB88C389340EBC3F1 /* DispatchSheet.swift */; };
+		F2385B45CBE9E5BF7B7DDEBF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A50506EFFCEB65945353A143 /* LoginView.swift */; };
 		FC353224440D7CBCD558B67C /* RootTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */; };
 		A1B2C3D4E5F60718293A4B01 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B02 /* Theme.swift */; };
 		A1B2C3D4E5F60718293A4B03 /* Effects.metal in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60718293A4B04 /* Effects.metal */; };
@@ -47,15 +51,18 @@
 		342ABC89904EDFB8CBB0F9E4 /* ToodleUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = ToodleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3D28D586CB17BBDA9314AC /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		4F1D59B2BDDB53FD9AFFF1F8 /* NodeDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeDetailSheet.swift; sourceTree = "<group>"; };
+		5F72779CE226D04830DA9CCE /* AlertFeedbackManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertFeedbackManager.swift; sourceTree = "<group>"; };
 		625062973E7C7D027DCCE59F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6F60B1358FCA4BC63ADAEAC9 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		986A1396F7FEE61A9058E3B5 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		9B982E5F63225622982B8982 /* AuthGateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthGateView.swift; sourceTree = "<group>"; };
+		A50506EFFCEB65945353A143 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		A5C4018F9CDAD8531B7ACAB3 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootTabView.swift; sourceTree = "<group>"; };
 		A5EE4DF4FFAF87CD9C2F7272 /* ToodleCore */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ToodleCore; path = Packages/ToodleCore; sourceTree = SOURCE_ROOT; };
 		BAE0D077528504DB14227262 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		D74EA5240505151502E3336E /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		E608D3AB1E2D207BEF01C6DC /* CommandCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommandCenterView.swift; sourceTree = "<group>"; };
-		E814FD9B7C860E0237A022E3 /* Toodle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Toodle.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E814FD9B7C860E0237A022E3 /* Toodle.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Toodle.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F340A2AFDC1095E1D6F915E4 /* ToodleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToodleUITests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B02 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60718293A4B04 /* Effects.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Effects.metal; sourceTree = "<group>"; };
@@ -69,6 +76,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D18C58BE61F168B9C35CBA7B /* ToodleCore in Frameworks */,
+				1A7EFEE81C55F1AD8322A5EA /* ClerkKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -135,6 +143,15 @@
 			);
 			sourceTree = "<group>";
 		};
+		D61B7F05118984A7CB0CAC83 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				9B982E5F63225622982B8982 /* AuthGateView.swift */,
+				A50506EFFCEB65945353A143 /* LoginView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		E51F647B8575546B46487D94 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
@@ -157,11 +174,21 @@
 			path = Features;
 			sourceTree = "<group>";
 		};
+		EFD356638FEF0FE69C0004DA /* Feedback */ = {
+			isa = PBXGroup;
+			children = (
+				5F72779CE226D04830DA9CCE /* AlertFeedbackManager.swift */,
+			);
+			path = Feedback;
+			sourceTree = "<group>";
+		};
 		F7E24A84FAD25489A3AE9480 /* Toodle */ = {
 			isa = PBXGroup;
 			children = (
 				6BE5E8D7AFCC212E6BD3F762 /* App */,
+				D61B7F05118984A7CB0CAC83 /* Auth */,
 				EECF21F84C1B514FF82E13FF /* Features */,
+				EFD356638FEF0FE69C0004DA /* Feedback */,
 				717EDFEB3CA76F458601FD99 /* Resources */,
 			);
 			path = Toodle;
@@ -194,6 +221,7 @@
 			name = Toodle;
 			packageProductDependencies = (
 				5FE1BD844337ECBD35DD68F8 /* ToodleCore */,
+				592184F4626ADDDB325039B0 /* ClerkKit */,
 			);
 			productName = Toodle;
 			productReference = E814FD9B7C860E0237A022E3 /* Toodle.app */;
@@ -246,8 +274,10 @@
 			mainGroup = AEAA3EFBBA169FE5338E84EC;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				CB44169DEC72A12DAC70D637 /* XCRemoteSwiftPackageReference "clerk-ios" */,
 				D06FB06E832E4FAE0A5C3DC2 /* XCLocalSwiftPackageReference "Packages/ToodleCore" */,
 			);
+			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -276,12 +306,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E08B1D454EC7EFCA7F2A0396 /* AlertFeedbackManager.swift in Sources */,
 				09A4BE8F56AB3F492590006F /* AppEnvironment.swift in Sources */,
+				A27586724F05CFDB986DCE31 /* AuthGateView.swift in Sources */,
 				2D36EA7A20797D8F021ECC22 /* CameraView.swift in Sources */,
 				6970D76BD62982238BADEC75 /* CaptureView.swift in Sources */,
 				40D1B381F093DB2DE4CBBA4D /* CommandCenterView.swift in Sources */,
 				EE9E3E1093BC7F51D9581457 /* DispatchSheet.swift in Sources */,
 				CC34DE3B91295C3B706CC81D /* HomeView.swift in Sources */,
+				F2385B45CBE9E5BF7B7DDEBF /* LoginView.swift in Sources */,
 				96ABF12808E9B4F381B3F77A /* NodeDetailSheet.swift in Sources */,
 				FC353224440D7CBCD558B67C /* RootTabView.swift in Sources */,
 				301D4FF71674B7B0C95827BD /* SettingsView.swift in Sources */,
@@ -542,7 +575,23 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		CB44169DEC72A12DAC70D637 /* XCRemoteSwiftPackageReference "clerk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/clerk/clerk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		592184F4626ADDDB325039B0 /* ClerkKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB44169DEC72A12DAC70D637 /* XCRemoteSwiftPackageReference "clerk-ios" */;
+			productName = ClerkKit;
+		};
 		5FE1BD844337ECBD35DD68F8 /* ToodleCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ToodleCore;

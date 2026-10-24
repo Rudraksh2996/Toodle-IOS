@@ -23,6 +23,7 @@ import ToodleCore
 struct CaptureView: View {
     @Environment(\.verticalSizeClass) private var verticalSizeClass
     @Environment(AppEnvironment.self) private var app
+    @Environment(AlertFeedbackManager.self) private var feedback
     @State private var location = LocationService()
     @State private var item: PhotosPickerItem?
     @State private var image: UIImage?
@@ -34,6 +35,8 @@ struct CaptureView: View {
     @State private var busy = false
     @State private var status = ""
     @State private var showDispatch = false
+    @State private var sendingAlert = false
+    @State private var alertStatus = ""
     var verified: Bool { guard cameraCapture, let fix = capturedFix else { return false }; return abs(fix.timestamp.timeIntervalSinceNow) < 120 && fix.horizontalAccuracy >= 0 && fix.horizontalAccuracy <= 50 && fix.sourceInformation?.isSimulatedBySoftware != true }
     var eligible: Bool { result?.eligible(freshGeotag:verified,mocked:!cameraCapture) == true }
     var fieldNode: Node {
@@ -73,13 +76,28 @@ struct CaptureView: View {
                     }
                 }.padding(24)
             }.navigationTitle("Field Capture").navigationBarTitleDisplayMode(.inline)
+                .safeAreaInset(edge:.bottom) {
+                    TimelineView(.periodic(from:.now,by:1)) { _ in
+                        VStack(spacing:6) {
+                            Button("Send Test Alert") { Task { await sendTestAlert() } }
+                                .buttonStyle(.borderedProminent).tint(eligible && !app.offline ? Tok.accent : .gray)
+                                .frame(maxWidth:.infinity)
+                                .disabled(!eligible || app.offline || sendingAlert)
+                                .accessibilityIdentifier("sendTestAlert")
+                            if !eligible || app.offline { Text("Capture and verify a live image with fresh GPS to enable alerts.").font(.caption).foregroundStyle(.secondary) }
+                            if sendingAlert { ProgressView() }
+                            if !alertStatus.isEmpty { Text(alertStatus).font(.caption).accessibilityIdentifier("testAlertStatus") }
+                        }.padding(.horizontal,24).padding(.vertical,12).frame(maxWidth:.infinity)
+                            .background(.regularMaterial)
+                    }
+                }
                 .sheet(isPresented:$camera) { CameraView { photo in accept(photo,fromCamera:true) } }
                 .sheet(isPresented:$showDispatch) { DispatchSheet(node:fieldNode,simulated:app.offline || result?.simulated == true || !verified,blockage:result?.blockage == true,evidenceExpiresAt:result?.simulated == true ? nil : capturedFix?.timestamp.addingTimeInterval(120)).environment(app) }
                 .onChange(of:item) { _,new in Task { do { if let data = try await new?.loadTransferable(type:Data.self), let photo = UIImage(data:data) { accept(photo,fromCamera:false) } } catch { status = "Could not load this photo." } } }
         }
     }
     func accept(_ photo:UIImage,fromCamera:Bool) {
-        result = nil; status = ""; cameraCapture = fromCamera; capturedFix = fromCamera && location.fresh ? location.fix : nil
+        result = nil; status = ""; alertStatus = ""; cameraCapture = fromCamera; capturedFix = fromCamera && location.fresh ? location.fix : nil
         let ratio = min(1,1280/max(photo.size.width,photo.size.height)); let size = CGSize(width:photo.size.width*ratio,height:photo.size.height*ratio)
         let format = UIGraphicsImageRendererFormat(); format.scale = 1
         let resized = UIGraphicsImageRenderer(size:size,format:format).image { _ in photo.draw(in:CGRect(origin:.zero,size:size)) }
@@ -91,6 +109,25 @@ struct CaptureView: View {
         guard let jpeg else { return }; busy = true; defer { busy = false }
         do { result = try await app.client.analyze(image:jpeg,lat:capturedFix?.coordinate.latitude,lng:capturedFix?.coordinate.longitude,mocked:!verified) }
         catch { result = .demo; status = "Analysis unavailable. Showing a labeled demo result. \(error.localizedDescription)" }
+    }
+    func sendTestAlert() async {
+        guard eligible, !app.offline, !sendingAlert else { return }
+        let key = "cooldown.live.\(fieldNode.id)"
+        let remaining = UserDefaults.standard.double(forKey:key) - Date().timeIntervalSince1970
+        guard remaining <= 0 else { alertStatus = "Alert cooldown active for \(Int(ceil(remaining))) seconds."; return }
+        sendingAlert = true; alertStatus = ""
+        defer { sendingAlert = false }
+        do {
+            let response = try await feedback.send(api:app.client,node:fieldNode,blockage:result?.blockage == true,baseURL:app.baseURL,simulated:false)
+            guard response.success else { alertStatus = "Dispatch was not accepted."; return }
+            let until = response.cooldownUntil ?? Date().timeIntervalSince1970 + 900
+            UserDefaults.standard.set(until,forKey:key)
+            alertStatus = "Accepted · \(response.messageId ?? "No message ID returned")"
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        } catch APIError.response(let status,let message,let seconds) {
+            alertStatus = message
+            if status == 429 { UserDefaults.standard.set(Date().timeIntervalSince1970 + max(seconds,1),forKey:key) }
+        } catch { alertStatus = "Delivery unconfirmed. \(error.localizedDescription)" }
     }
 }
 #Preview { CaptureView().environment(AppEnvironment()) }

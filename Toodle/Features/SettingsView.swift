@@ -1,7 +1,9 @@
 import SwiftUI
 import ToodleCore
+import ClerkKit
 struct SettingsView: View {
     @Environment(AppEnvironment.self) private var app
+    @Environment(Clerk.self) private var clerk
     @State private var health: HealthReport?
     @State private var status = ""
     @State private var busy = false
@@ -25,6 +27,9 @@ struct SettingsView: View {
                     Text("Toodle · 1.0 (1)")
                     Text("Created for KIET Group of Institutions. Built with SwiftUI.")
                     Text("Rainfall: Open-Meteo. Maps: Apple Maps. Risk estimates support field inspection and do not replace official emergency guidance.").font(.caption)
+                }
+                Section("Account") {
+                    Button("Sign Out") { Task { do { try await clerk.auth.signOut() } catch { status = error.localizedDescription } } }
                 }
             }.navigationTitle("Settings")
         }.onChange(of:app.offline) { _,_ in app.stop(); app.stage = nil; Task { await app.refresh() } }

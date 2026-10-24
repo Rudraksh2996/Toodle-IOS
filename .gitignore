@@ -3,3 +3,4 @@
 DerivedData/
 *.xcuserstate
 xcuserdata/
+Config/Clerk.local.xcconfig
